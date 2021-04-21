@@ -24,7 +24,7 @@ class Server():
         now = datetime.now()
 
         try:
-            if self.connection == "plain"
+            if self.connection == "plain":
                 socket.create_connection((self.name, self.port), timeout=10)
                 msg = f"{self.name} er online på port {self.port} med {self.connection}"
                 success = True
@@ -44,5 +44,43 @@ class Server():
         except (ConnectionRefusedError, ConnectionResetError) as e:
             msg = f"Serveren: {self.name} {e}"
         except Exception as e:
-            msg f"Det virker bare ikke!!!!!!: {e}"
 
+            if sucesss == False and self.alert == False:
+            # Send alert
+                self.alert = True
+            email_alert(self.name,f"{msg}\n{now}","some@email.here")
+        self.create_history(msg,success,now)
+
+    def create_history(self, msg, success, now):
+        history_max = 100
+        self.history.append((msg,success,now))
+
+        while len(self.history) > history_max:
+            self.history.pop(0)
+
+    def ping(self):
+        try:
+            output = subprocess.check_output("ping -{} 1 {}".format('n' if platform.system().lower(
+            ) == "windows" else 'c', self.name ), shell=True, universal_newlines=True)
+            if 'unreachable' in output:
+                return False
+            else:
+                return True
+        except Exception:
+                return False
+
+
+if __name__ == "__main__":
+    try:
+        servers = pickle.load(open("servers.pickle", "rb"))
+    except:
+        servers = [
+            Server("tv2.dk", 80, "plain", "high"),
+            Server("r159.dk", 80, "plain", "high")
+        ]
+    for server in servers:
+        server.check_connection()
+        print(len(server.history))
+        print(server.history[-1])
+
+    pickle.dump(servers, open("servers.pickle", "wb"))
