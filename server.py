@@ -34,4 +34,15 @@ class Server():
                 msg = f"{self.name} er online på port {self.port} med {self.connection}"
                 success = True
                 self.alert = False
+            else:
+                if self.ping():
+                    msg = f"{self.name} er online på port {self.port} med {self.connection}"
+                    success = True
+                    self.alert = False
+        except socket.timeout:
+            msg = f"Serveren: {self.name} er timeouted. På port {self.port}"
+        except (ConnectionRefusedError, ConnectionResetError) as e:
+            msg = f"Serveren: {self.name} {e}"
+        except Exception as e:
+            msg f"Det virker bare ikke!!!!!!: {e}"
 
