@@ -9,11 +9,11 @@ import platform
 
 # Here is where we define our constructor method. Attributes added for support on unix and regular data
 class Server():
-    def __init__(self, name, port, connection, prirority):
+    def __init__(self, name, port, connection, priority):
         self.name = name
         self.port = port
         self.connection = connection.lower()
-        self.priorrity = priority.lower()
+        self.priority = priority.lower()
         self.history = []
         self.alert = False
 
@@ -45,7 +45,7 @@ class Server():
             msg = f"Serveren: {self.name} {e}"
         except Exception as e:
 
-            if sucesss == False and self.alert == False:
+            if success == False and self.alert == False:
             # Send alert
                 self.alert = True
             email_alert(self.name,f"{msg}\n{now}","some@email.here")
@@ -71,16 +71,14 @@ class Server():
 
 
 if __name__ == "__main__":
-    try:
-        servers = pickle.load(open("servers.pickle", "rb"))
-    except:
-        servers = [
-            Server("tv2.dk", 80, "plain", "high"),
-            Server("r159.dk", 80, "plain", "high")
+    servers = [
+        Server("tv2.dk", 80, "ssl", "high"),
+        Server("r159.dk", 80, "plain", "high")
         ]
+
     for server in servers:
         server.check_connection()
         print(len(server.history))
         print(server.history[-1])
 
-    pickle.dump(servers, open("servers.pickle", "wb"))
+    # pickle.dump(servers, open("servers.pickle", "wb"))
