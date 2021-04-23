@@ -10,7 +10,7 @@ def email_alert(subject, body, to):
     msg = EmailMessage()
     msg.set_content(body)
 
-    gmail_user = 'ravnshoej.gaming@gmail.com'
+    gmail_user = os.getenv('GMAIL_EMAIL')
     gmail_password = os.getenv("GMAIL_PASSWORD")
     msg['Subject'] = subject
     msg['From'] = os.getenv("GMAIL_EMAIL")
