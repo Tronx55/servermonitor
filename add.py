@@ -1,7 +1,6 @@
 import pickle
-from CheckServer import Server
+from server import Server
 
-servers = pickle.load( open( "servers.pickle", "rb" ) )
 
 print("Tilføj din server")
 

@@ -4,6 +4,7 @@ from datetime import datetime
 import pickle
 import subprocess
 import platform
+from gmail import email_alert
 
 
 
@@ -30,7 +31,7 @@ class Server():
                 success = True
                 self.alert = False
             elif self.connection == "ssl":
-                ssl.wrap.connection(socket.create_connection((self.name, self.port), timeout=10))
+                ssl.wrap_connection(socket.create_connection((self.name, self.port), timeout=10))
                 msg = f"{self.name} er online på port {self.port} med {self.connection}"
                 success = True
                 self.alert = False
@@ -48,7 +49,7 @@ class Server():
             if success == False and self.alert == False:
             # Send alert
                 self.alert = True
-            email_alert(self.name,f"{msg}\n{now}","some@email.here")
+            email_alert(self.name,f"{msg}\n{now}","tron.999@hotmail.com")
         self.create_history(msg,success,now)
 
     def create_history(self, msg, success, now):
@@ -72,7 +73,7 @@ class Server():
 
 if __name__ == "__main__":
     servers = [
-        Server("tv2.dk", 80, "ssl", "high"),
+        Server("dette_er_en_test_hjemmeside_der_skal_vise_systemet_virker.dk", 80, "plain", "high"),
         Server("r159.dk", 80, "plain", "high")
         ]
 
