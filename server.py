@@ -7,7 +7,6 @@ import platform
 from gmail import email_alert
 
 
-
 # Here is where we define our constructor method. Attributes added for support on unix and regular data
 class Server():
     def __init__(self, name, port, connection, priority):
@@ -72,14 +71,16 @@ class Server():
 
 
 if __name__ == "__main__":
-    servers = [
-        Server("dette_er_en_test_hjemmeside_der_skal_vise_systemet_virker.dk", 80, "plain", "high"),
-        Server("r159.dk", 80, "plain", "high")
+    try:
+        servers = pickle.load( open("servers.pickle", "rb") )
+    except:
+        servers = [
+            Server("dette_er_en_test_hjemmeside_der_skal_vise_systemet_virker.dk", 80, "plain", "high"),
+            Server("r159.dk", 80, "plain", "high")
         ]
-
     for server in servers:
         server.check_connection()
         print(len(server.history))
         print(server.history[-1])
 
-    # pickle.dump(servers, open("servers.pickle", "wb"))
+    pickle.dump(servers, open("servers.pickle", "wb"))
