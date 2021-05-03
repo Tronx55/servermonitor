@@ -1,1 +1,7 @@
 .env
+
+_pycache_
+
+.vscode
+
+.idea

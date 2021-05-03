@@ -17,18 +17,22 @@ class Server():
         self.history = []
         self.alert = False
 
-# Checking conneciton
+# Defining our check_conneciton
     def check_connection(self):
         msg = ""
         success = False
         now = datetime.now()
 
+# Here we define our test methods. Via our socket, we create a connection to {self.name} with the defined port {self.port} If connection is not established later than 10 seconds, the connection will timeout.
         try:
             if self.connection == "plain":
                 socket.create_connection((self.name, self.port), timeout=10)
+# If the connection is successfully established, it will print out msg, and tell us the service is running without issues.
                 msg = f"{self.name} er online på port {self.port} med {self.connection}"
                 success = True
                 self.alert = False
+# If test value is not set to plain, the use a else if, or elif to run our second part of our code. In this part we check if there is the possibility to create a SSL connection.
+# In this instance, due to SSL connections being encrypted, we first need to wrap our connection in a SSL packet, to make sure the responding server will receive and respond to the request.
             elif self.connection == "ssl":
                 ssl.wrap_connection(socket.create_connection((self.name, self.port), timeout=10))
                 msg = f"{self.name} er online på port {self.port} med {self.connection}"
